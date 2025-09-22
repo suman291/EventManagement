@@ -48,11 +48,18 @@
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $event->title }}</td>
-                                        <td>{{ $event->date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($event->date)->format('M d, Y') }}</td>
                                         <td>{{ $event->location }}</td>
                                         <td>{{ $event->seats }}</td>
                                         <td class="text-center">
-
+                                            {{-- Book Event Button --}}
+                                            <form action="{{ route('bookings.store') }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                                <button type="submit" class="btn btn-sm btn-primary" title="Book Event">
+                                                    <i class="fas fa-bookmark"></i> Book
+                                                </button>
+                                            </form>
 
                                             {{-- Admin-only Actions (Edit & Delete) --}}
                                             {{-- These buttons should be conditionally rendered for admin users only --}}
