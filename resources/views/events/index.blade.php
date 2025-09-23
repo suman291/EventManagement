@@ -9,7 +9,7 @@
                     <h4 class="mb-0">All Events</h4>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4" id="alertsContainer">
                         {{-- Create Event Button --}}
                         <a href="{{ route('events.create') }}" class="btn btn-success">
                             <i class="fas fa-plus-circle me-2"></i> Create New Event
@@ -30,7 +30,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
-
+                      <div class="alert alert-success alert-dismissible fade show" style="display: none;" id="alert_showing_div" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped">
                             <thead class="bg-light">
@@ -43,8 +45,8 @@
                                     <th scope="col" class="text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @forelse($events as $event)
+                            <tbody id="events_list">
+                                {{-- @forelse($events as $event)
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $event->title }}</td>
@@ -56,7 +58,7 @@
 
                                             {{-- Admin-only Actions (Edit & Delete) --}}
                                             {{-- These buttons should be conditionally rendered for admin users only --}}
-                                            <a href="{{ route('events.edit', $event) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
+                                            {{-- <a href="{{ route('events.edit', $event) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
                                             <form action="{{ route('events.destroy', $event) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this event?');">
@@ -73,8 +75,8 @@
                                         <td colspan="6" class="text-center py-4">
                                             <p class="text-muted mb-0">No events found.</p>
                                         </td>
-                                    </tr>
-                                @endforelse
+                                    </tr> --}}
+
                             </tbody>
                         </table>
                     </div>

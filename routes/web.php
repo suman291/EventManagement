@@ -14,5 +14,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('events', EventController::class);
+    // Custom route to get event details
+    Route::post('eventsDetails', [EventController::class, 'getEventDetails']);
     Route::resource('bookings', BookingController::class);
 });

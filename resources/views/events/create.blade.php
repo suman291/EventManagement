@@ -5,8 +5,7 @@
         <div class="card shadow-sm">
             <div class="card-header text-center bg-primary text-white text-center">Create Event</div>
                 <div class="card-body">
-                        <form method="POST" action="{{ route('events.store') }}" class="needs-validation" novalidate>
-                            @csrf
+                        <form  id="form_saveEvent" class="needs-validation" novalidate onsubmit="return saveEvent(this)">
                             <div class="mb-3">
                             <label class="form-label">Title</label>
                             <input type="text" name="title" class="form-control" required>

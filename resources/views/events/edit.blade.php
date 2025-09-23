@@ -20,19 +20,19 @@
                         @method('PUT')
                         <div class="mb-3">
                         <label class="form-label">Title</label>
-                        <input type="text" name="title" value="{{ $event->title}}" class="form-control">
+                        <input type="text" name="title" value="{{ $event->title}}" class="form-control" required>
                         </div>
                         <div class="mb-3">
                         <label class="form-label">Date</label>
-                        <input type="date" name="date" value="{{ $event->date}}" class="form-control">
+                        <input type="date" name="date" value="{{ $event->date}}" class="form-control" required>
                         </div>
                         <div class="mb-3">
                         <label class="form-label">Location</label>
-                        <input type="text" name="location" value="{{ $event->location}}" class="form-control">
+                        <input type="text" name="location" value="{{ $event->location}}" class="form-control" required>
                         </div>
                         <div class="mb-3">
                         <label class="form-label">Seats</label>
-                        <input type="number" name="seats" value="{{ $event->seats}}" class="form-control">
+                        <input type="number" name="seats" value="{{ $event->seats}}" class="form-control" required>
                         </div>
                         <button type="submit" class="btn btn-success w-100">Update</button>
                     </form>
