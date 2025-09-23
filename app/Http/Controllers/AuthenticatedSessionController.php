@@ -21,8 +21,14 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->remember)) {
+            $user=Auth::user();
+            if($user['is_admin']):
             $request->session()->regenerate();
             return redirect()->route('events.index');
+            else:
+                $request->session()->regenerate();
+                return redirect()->route('bookings.index');
+            endif;
         }
 
         return back()->withErrors([

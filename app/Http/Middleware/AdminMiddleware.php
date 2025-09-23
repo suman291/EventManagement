@@ -23,6 +23,8 @@ class AdminMiddleware
         // 2. Check if the authenticated user has the 'is_admin' attribute set to true
         if (auth()->user()->is_admin) {
             return $next($request);
+        }else{
+            return $next($request);
         }
         return redirect()->route('login')->with('error', 'Access denied. You are not an administrator.');
     }

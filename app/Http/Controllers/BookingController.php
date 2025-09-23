@@ -17,9 +17,9 @@ class BookingController extends Controller
     public function index()
     {
         // Get all bookings for the currently authenticated user
-        $bookings = Auth::user()->bookings()->with('event')->get();
 
-        return view('bookings.index', compact('bookings'));
+        $events= Event::all();
+        return view('bookings.index', compact('events'));
     }
 
     /**
@@ -46,20 +46,21 @@ class BookingController extends Controller
         // 1. Validate the incoming request
         $request->validate([
             'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         // 2. Find the event
         $event = Event::findOrFail($request->event_id);
-
         // 3. Check for available seats
         if ($event->seats <= 0) {
-            return redirect()->route('events.index')->with('error', 'Sorry, this event is fully booked.');
+            return redirect()->route('bookings.index')->with('error', 'Sorry, this event is fully booked.');
         }
 
         // 4. Check if the user has already booked this event
         if (Auth::user()->bookings()->where('event_id', $event->id)->exists()) {
-            return redirect()->route('events.index')->with('error', 'You have already booked this event.');
+            return redirect()->route('bookings.index')->with('error', 'You have already booked this event.');
         }
+
 
         // 5. Create the booking
         $booking = new Booking();
@@ -72,7 +73,10 @@ class BookingController extends Controller
 
         return redirect()->route('bookings.index')->with('success', 'Event booked successfully!');
     }
-
+    public function myBookings(){
+        $bookings = Auth::user()->bookings()->with('event')->get();
+        return view('bookings.myBookings',compact('bookings'));
+    }
     /**
      * Display the specified resource.
      *
@@ -98,7 +102,7 @@ class BookingController extends Controller
      */
     public function edit(string $id)
     {
-        return redirect()->route('bookings.index')->with('error', 'Bookings cannot be edited.');
+
     }
 
     /**

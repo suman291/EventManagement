@@ -10,11 +10,11 @@
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        {{-- Create Event Button --}}
-                        <a href="{{ route('events.create') }}" class="btn btn-success">
-                            <i class="fas fa-plus-circle me-2"></i> Create New Event
-                        </a>
 
+                         {{-- My Bookings --}}
+                        <a href="{{ route('myBookings') }}" class="btn btn-success">
+                            <i class="fas fa-plus-circle me-2"></i> My Bookings
+                        </a>
                         {{-- Logout Button --}}
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
@@ -30,6 +30,12 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
 
                     <div class="table-responsive">
                         <table class="table table-hover table-striped">
@@ -40,7 +46,7 @@
                                     <th scope="col">Date</th>
                                     <th scope="col">Location</th>
                                     <th scope="col">Seats</th>
-                                    <th scope="col" class="text-center">Actions</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,29 +57,27 @@
                                         <td>{{ \Carbon\Carbon::parse($event->date)->format('M d, Y') }}</td>
                                         <td>{{ $event->location }}</td>
                                         <td>{{ $event->seats }}</td>
-                                        <td class="text-center">
-                                            {{-- Book Event Button --}}
-                                            <form action="{{ route('bookings.store') }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <input type="hidden" name="event_id" value="{{ $event->id }}">
-                                                <button type="submit" class="btn btn-sm btn-primary" title="Book Event">
-                                                    <i class="fas fa-bookmark"></i> Book
-                                                </button>
-                                            </form>
+                                        <td>
+    <div class="d-flex gap-2">
+        {{-- Book button --}}
+        <form method="POST" action="{{ route('bookings.store') }}" class="needs-validation" novalidate>
+            @csrf
+            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+            <input type="hidden" name="event_id" value="{{ $event->id }}">
+            <button type="submit" class="btn btn-success btn-sm">Book</button>
+        </form>
 
-                                            {{-- Admin-only Actions (Edit & Delete) --}}
-                                            {{-- These buttons should be conditionally rendered for admin users only --}}
-                                            <a href="{{ route('events.edit', $event) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                            <form action="{{ route('events.destroy', $event) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this event?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                                    <i class="fas fa-trash-alt"></i> Delete
-                                                </button>
-                                            </form>
-                                        </td>
+        {{-- Cancel buttons --}}
+        @foreach($event->booking as $booking)
+            <form method="POST" action="{{ route('bookings.destroy', $booking->id) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+            </form>
+        @endforeach
+    </div>
+</td>
+
                                     </tr>
                                 @empty
                                     <tr>
